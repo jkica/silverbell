@@ -43,6 +43,31 @@ const db = mysql.createConnection({
     database: "silverbell",
 });
 
+const login = (req, res, email, password) => {
+    db.query(
+        "SELECT * FROM users WHERE email = ?;",
+        email,
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
+            }
+
+            if (result.length > 0) {
+                bcrypt.compare(password, result[0].password, (error, response) => {
+                    if (response) {
+                        req.session.user = result;
+                        res.send(result);
+                    } else {
+                        res.status(403).send({ msg: "Wrong username/password combination" });
+                    }
+                });
+            } else {
+                res.status(403).send({ msg: "User doesn't exist" });
+            }
+        }
+    );
+}
+
 app.post("/register", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -57,7 +82,11 @@ app.post("/register", (req, res) => {
             "INSERT INTO users (email, password, full_name) VALUES (?,?,?)",
             [email, hash, name],
             (err, result) => {
-                console.log(err);
+                if (err) {
+                    console.log(err);
+                } else {
+                    login(req, res, email, password);
+                }
             }
         );
     });
@@ -87,28 +116,7 @@ app.post("/login", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    db.query(
-        "SELECT * FROM users WHERE email = ?;",
-        email,
-        (err, result) => {
-            if (err) {
-                res.send({ err: err });
-            }
-
-            if (result.length > 0) {
-                bcrypt.compare(password, result[0].password, (error, response) => {
-                    if (response) {
-                        req.session.user = result;
-                        res.send(result);
-                    } else {
-                        res.status(403).send({ msg: "Wrong username/password combination" });
-                    }
-                });
-            } else {
-                res.status(403).send({ msg: "User doesn't exist" });
-            }
-        }
-    );
+    login(req, res, email, password);
 });
 app.get('/logout', function(req,res){
     req.session.destroy(null);

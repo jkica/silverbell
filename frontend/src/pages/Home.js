@@ -32,14 +32,13 @@ export const Home = () => {
                     setUser(res.data.user);
                     !res.data.loggedIn && navigate('/login');
                 }
-            })
+            });
     }, [])
     
     useEffect(() => {
         loggedIn && axios
             .get(getAllUsersUrl(), {withCredentials: true})
             .then(res => {
-                console.log(res)
                 if (res.data) {
                     setAllUsers(res.data);
                     setBusy(false);
