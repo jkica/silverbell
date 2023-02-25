@@ -1,0 +1,39 @@
+/* ALL */
+.table-wrapper {
+    padding: 5vh 5vw;
+}
+.table-row:hover {
+    cursor: pointer;
+    -webkit-box-shadow: 0 1px 10px 0 rgba(0,0,0,0.75);
+    -moz-box-shadow: 0 1px 10px 0 rgba(0,0,0,0.75);
+    box-shadow: 0 1px 10px 0 rgba(0,0,0,0.75);
+}
+.loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+/* ADD */
+
+
+/* EDIT */
+.edit-modal {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20vh;
+    padding: 20px;
+}
+.edit-modal-header {
+    display: flex;
+    justify-content: space-between;
+}
+.edit-modal-header-title {
+    align-self: center;
+}
+.edit-modal .edit-modal-btn {
+    margin-bottom: 10px;
+}
+.edit-modal > div {
+    margin-bottom: 40px;
+}
