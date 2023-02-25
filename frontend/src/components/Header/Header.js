@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
 // components
 import AppBar from '@mui/material/AppBar';
@@ -11,40 +13,20 @@ import Button from '@mui/material/Button';
 //assets
 import Logo from '../../assets/logo.svg';
 import './style.css';
-// import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
-import axios from "axios";
-import {LogOutUrl} from "../../constants/endpoints";
-import {useEffect} from "react";
+import { LogOutUrl } from "../../constants/endpoints";
 
 export const Header = ({user}) => {
     const location = useLocation();
-
-    useEffect(() => {
-      user && console.log(user)  
-    }, [user])
+    const navigate = useNavigate();
+    
     const logOut = () => {
         axios.get(
-            LogOutUrl(),
-            {
-                withCredentials: true
-            })
+            LogOutUrl(),{withCredentials: true})
             .then(res => {
-                // createPost(res.data);
-                // setToaster({
-                //     visible: true,
-                //     success: true,
-                //     type: 'create',
-                //     message: 'Logged Out'
-                // });
+                navigate('/login')
             })
             .catch(err => {
                 console.log(err)
-                // setToaster({
-                //     visible: true,
-                //     success: false,
-                //     type: 'create',
-                //     message: err.response.data.msg
-                // });
             })
     }
     
@@ -67,7 +49,6 @@ export const Header = ({user}) => {
                             className="header-create-btn"
                             color="error"
                             size="large"
-                            // endIcon={<AddCircleOutlineRoundedIcon />}
                             variant="contained">
                             log out
                         </Button>

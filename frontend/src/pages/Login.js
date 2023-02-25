@@ -1,13 +1,13 @@
-import React, { useState, useContext } from 'react';
-import axios from "axios";
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { LoginUrl } from "../constants/endpoints";
+import { LogInUrl } from "../constants/endpoints";
+import axios from "axios";
 
 // components
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
-import { Alert, Snackbar, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
+import { Alert, Snackbar, TextField } from "@mui/material";
 
 export const Login = () => {
     const navigate = useNavigate();
@@ -16,6 +16,7 @@ export const Login = () => {
         email: '',
         password: ''
     });
+    // TODO@jkica: make toaster global
     const [toaster, setToaster] = useState({
         visible: false,
         success: false,
@@ -31,9 +32,9 @@ export const Login = () => {
             }
         })
     }
-    const login = () => {
+    const logIn = () => {
         axios.post(
-            LoginUrl(),
+            LogInUrl(),
             formData,
             {
                 headers: {
@@ -42,7 +43,6 @@ export const Login = () => {
                 withCredentials: true
             })
             .then(res => {
-                // createPost(res.data);
                 setToaster({
                     visible: true,
                     success: true,
@@ -80,17 +80,17 @@ export const Login = () => {
                     <TextField
                         type="email"
                         onChange={e => handleFieldChange('email', e.target.value)}
-                        onKeyPress={e => e.key === 'Enter' && login()}
+                        onKeyDown={e => e.key === 'Enter' && logIn()}
                         label="Email" />
                     <TextField
                         type="password"
                         onChange={e => handleFieldChange('password', e.target.value)}
-                        onKeyPress={e => e.key === 'Enter' && login()}
+                        onKeyDown={e => e.key === 'Enter' && logIn()}
                         label="Password" />
                     <div>Don't have an account? Register <a href="/register">here</a>.</div>
                     <Button
                         type="submit"
-                        onClick={login}
+                        onClick={logIn}
                         disabled={!inputValuesChanged}
                         className="edit-modal-btn"
                         variant="contained">

@@ -6,8 +6,8 @@ import { RegisterUrl } from "../constants/endpoints";
 // components
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
-import { Alert, Snackbar, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
+import { Alert, Snackbar, TextField } from "@mui/material";
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -17,6 +17,7 @@ export const Register = () => {
         email: '',
         password: ''
     });
+    // TODO@jkica: make toaster global
     const [toaster, setToaster] = useState({
         visible: false,
         success: false,
@@ -77,17 +78,17 @@ export const Register = () => {
                     </div>
                     <TextField
                         onChange={e => handleFieldChange('name', e.target.value)}
-                        onKeyPress={e => e.key === 'Enter' && register()}
+                        onKeyDown={e => e.key === 'Enter' && register()}
                         label="Full Name" />
                     <TextField
                         type="email"
                         onChange={e => handleFieldChange('email', e.target.value)}
-                        onKeyPress={e => e.key === 'Enter' && register()}
+                        onKeyDown={e => e.key === 'Enter' && register()}
                         label="Email" />
                     <TextField
                         type="password"
                         onChange={e => handleFieldChange('password', e.target.value)}
-                        onKeyPress={e => e.key === 'Enter' && register()}
+                        onKeyDown={e => e.key === 'Enter' && register()}
                         label="Password" />
                     <div>Already have an account? Login <a href="/login">here</a>.</div>
                     <Button
