@@ -59,6 +59,8 @@ export const Home = () => {
                                         <TableCell><strong>ID</strong></TableCell>
                                         <TableCell align="left"><strong>Full Name</strong></TableCell>
                                         <TableCell align="left"><strong>Email</strong></TableCell>
+                                        <TableCell align="left"><strong>Created At</strong></TableCell>
+                                        <TableCell align="left"><strong>Updated At</strong></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -71,6 +73,8 @@ export const Home = () => {
                                                 <TableCell component="th" scope="user">{user.id}</TableCell>
                                                 <TableCell align="left">{user.full_name}</TableCell>
                                                 <TableCell align="left">{user.email}</TableCell>
+                                                <TableCell align="left">{user.created_at}</TableCell>
+                                                <TableCell align="left">{user.updated_at}</TableCell>
                                             </TableRow>
                                         ))
                                     }
