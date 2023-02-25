@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { RegisterUrl } from "../constants/endpoints";
@@ -20,7 +20,6 @@ export const Register = () => {
     const [toaster, setToaster] = useState({
         visible: false,
         success: false,
-        type: '',
         message: ''
     });
 
@@ -33,7 +32,6 @@ export const Register = () => {
             }
         })
     }
-
     const register = () => {
         axios.post(
             RegisterUrl(),
@@ -44,11 +42,9 @@ export const Register = () => {
                 }
             })
             .then(res => {
-                // createPost(res.data);
                 setToaster({
                     visible: true,
                     success: true,
-                    type: 'create',
                     message: 'Registered'
                 });
             })
@@ -56,7 +52,6 @@ export const Register = () => {
                 setToaster({
                     visible: true,
                     success: false,
-                    type: 'create',
                     message: 'Error'
                 });
             })
@@ -70,9 +65,7 @@ export const Register = () => {
             }
         });
 
-        toaster.success &&
-        toaster.type === 'create' &&
-        navigate('/');
+        toaster.success && navigate('/');
     }
 
     return (
@@ -84,13 +77,19 @@ export const Register = () => {
                     </div>
                     <TextField
                         onChange={e => handleFieldChange('name', e.target.value)}
+                        onKeyPress={e => e.key === 'Enter' && register()}
                         label="Full Name" />
                     <TextField
+                        type="email"
                         onChange={e => handleFieldChange('email', e.target.value)}
+                        onKeyPress={e => e.key === 'Enter' && register()}
                         label="Email" />
                     <TextField
+                        type="password"
                         onChange={e => handleFieldChange('password', e.target.value)}
+                        onKeyPress={e => e.key === 'Enter' && register()}
                         label="Password" />
+                    <div>Already have an account? Login <a href="/login">here</a>.</div>
                     <Button
                         type="submit"
                         onClick={register}
@@ -99,12 +98,6 @@ export const Register = () => {
                         variant="contained">
                         Register
                     </Button>
-                    {/*<Button*/}
-                    {/*    href="/register"*/}
-                    {/*    className="edit-modal-btn"*/}
-                    {/*    variant="outlined">*/}
-                    {/*    Cancel*/}
-                    {/*</Button>*/}
                 </Paper>
             </Container>
             <Snackbar

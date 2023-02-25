@@ -19,7 +19,6 @@ export const Login = () => {
     const [toaster, setToaster] = useState({
         visible: false,
         success: false,
-        type: '',
         message: ''
     });
 
@@ -32,7 +31,6 @@ export const Login = () => {
             }
         })
     }
-
     const login = () => {
         axios.post(
             LoginUrl(),
@@ -40,14 +38,14 @@ export const Login = () => {
             {
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8'
-                }
+                },
+                withCredentials: true
             })
             .then(res => {
                 // createPost(res.data);
                 setToaster({
                     visible: true,
                     success: true,
-                    type: 'create',
                     message: 'Logged In'
                 });
             })
@@ -56,7 +54,6 @@ export const Login = () => {
                 setToaster({
                     visible: true,
                     success: false,
-                    type: 'create',
                     message: err.response.data.msg
                 });
             })
@@ -70,9 +67,7 @@ export const Login = () => {
             }
         });
 
-        toaster.success &&
-        toaster.type === 'create' &&
-        navigate('/');
+        toaster.success && navigate('/');
     }
 
     return (
@@ -83,11 +78,16 @@ export const Login = () => {
                         <div className="edit-modal-header-title">Login</div>
                     </div>
                     <TextField
+                        type="email"
                         onChange={e => handleFieldChange('email', e.target.value)}
+                        onKeyPress={e => e.key === 'Enter' && login()}
                         label="Email" />
                     <TextField
+                        type="password"
                         onChange={e => handleFieldChange('password', e.target.value)}
+                        onKeyPress={e => e.key === 'Enter' && login()}
                         label="Password" />
+                    <div>Don't have an account? Register <a href="/register">here</a>.</div>
                     <Button
                         type="submit"
                         onClick={login}
@@ -96,12 +96,6 @@ export const Login = () => {
                         variant="contained">
                         Login
                     </Button>
-                    {/*<Button*/}
-                    {/*    href="/login"*/}
-                    {/*    className="edit-modal-btn"*/}
-                    {/*    variant="outlined">*/}
-                    {/*    Cancel*/}
-                    {/*</Button>*/}
                 </Paper>
             </Container>
             <Snackbar

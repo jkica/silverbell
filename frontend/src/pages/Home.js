@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import './style.css'
-import { getCurrentUserUrl } from "../constants/endpoints";
+import {getAllUsersUrl, getCurrentUserUrl} from "../constants/endpoints";
 
 // components
 import Table from '@mui/material/Table';
@@ -13,48 +13,38 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { CircularProgress } from "@mui/material";
+import {Header} from "../components/Header/Header";
 
 export const Home = () => {
-    const allUsers = [
-        {
-            id: 1,
-            name: 'banana',
-            email: 'banan@mail.com'
-        },
-        {
-            id: 2,
-            name: 'banana2',
-            email: 'banan2@mail.com'
-        }]
     const [loggedIn, setLoggedIn] = useState(false);
+    const [user, setUser] = useState();
+    const [allUsers, setAllUsers] = useState([]);
     const [busy, setBusy] = useState(false);
     const navigate = useNavigate();
     
     useEffect(() => {
-        // redirect to login if not authenticated
-        axios.get(getCurrentUserUrl())
+        axios.get(getCurrentUserUrl(), {withCredentials: true})
             .then(res => {
-                console.log('banana auth', res.data)
-                !(res.data && res.data.loggedIn) && navigate('/login');
+                if (res.data) {
+                    setLoggedIn(res.data.loggedIn);
+                    setUser(res.data.user);
+                    !res.data.loggedIn && navigate('/login');
+                }
             })
-        // navigate('/register')
     }, [])
     
-    // useEffect(() => {
-    //     busy && axios.get(getAllUsersUrl())
-    //         .then(res => {
-    //             initPosts(res.data)
-    //             setBusy(false);
-    //         })
-    //         .catch(err => {
-    //             // TODO@jkcia: catch error
-    //
-    //             setBusy(false);
-    //         })
-    // }, [])
-
+    useEffect(() => {
+        loggedIn && axios
+            .get(getAllUsersUrl(), {withCredentials: true})
+            .then(res => {
+                console.log(res)
+                setAllUsers(res.data)
+            })
+    }, [loggedIn])
+    
     return (
         <div className="table-wrapper">
+            <Header user={user}/>
             {
                 !busy ?
                     <TableContainer component={Paper}>
@@ -62,9 +52,8 @@ export const Home = () => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell><strong>ID</strong></TableCell>
-                                    <TableCell align="left"><strong>Title</strong></TableCell>
-                                    <TableCell align="left"><strong>Description</strong></TableCell>
-                                    <TableCell align="left"><strong>User ID</strong></TableCell>
+                                    <TableCell align="left"><strong>Full Name</strong></TableCell>
+                                    <TableCell align="left"><strong>Email</strong></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -74,7 +63,8 @@ export const Home = () => {
                                             key={user.id}
                                             onClick={() => navigate(`/users/${user.id}`)}
                                             className="table-row">
-                                            <TableCell component="th" scope="user">{user.name}</TableCell>
+                                            <TableCell component="th" scope="user">{user.id}</TableCell>
+                                            <TableCell align="left">{user.full_name}</TableCell>
                                             <TableCell align="left">{user.email}</TableCell>
                                         </TableRow>
                                     ))

@@ -65,11 +65,23 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/me", (req, res) => {
-    console.log('banana', req.session.user)
     if (req.session.user) {
-        res.send({ loggedIn: true, user: req.session.user });
+        res.send({ loggedIn: true, user: req.session.user[0] });
     } else {
         res.send({ loggedIn: false });
+    }
+});
+app.get("/get-all-users", (req, res) => {
+    if (req.session.user) {
+        db.query(
+            "SELECT * FROM users",
+            (err, result) => {
+                res.send(result);
+                console.log(result);
+            }
+        );
+    } else {
+        res.status(403).send({ msg: 'Log in first' });
     }
 });
 
@@ -101,6 +113,13 @@ app.post("/login", (req, res) => {
         }
     );
 });
+app.get('/logout', function(req,res){
+    console.log(this.cookie)
+    req.session.destroy(null);
+    res.clearCookie('connect.sid');
+    res.send({msg: 'Logged Out'})
+});
+
 
 app.listen(process.env.PORT, () => {
     console.log(`Server running on port ${process.env.PORT}`);
