@@ -34,11 +34,7 @@ export const Header = ({user}) => {
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar className="header-wrapper" disableGutters>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="/">
+                    <Typography variant="h6" noWrap>
                         <img src={Logo} alt="logo"/>
                     </Typography>
                     <h1>Welcome {user && user.full_name.toUpperCase()}</h1>
