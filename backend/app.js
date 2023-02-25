@@ -51,7 +51,6 @@ app.post("/register", (req, res) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) {
             res.status(403).send(err)
-            console.log(err);
         }
 
         db.query(
@@ -77,7 +76,6 @@ app.get("/get-all-users", (req, res) => {
             "SELECT * FROM users",
             (err, result) => {
                 res.send(result);
-                console.log(result);
             }
         );
     } else {
@@ -101,7 +99,6 @@ app.post("/login", (req, res) => {
                 bcrypt.compare(password, result[0].password, (error, response) => {
                     if (response) {
                         req.session.user = result;
-                        console.log(req.session.user);
                         res.send(result);
                     } else {
                         res.status(403).send({ msg: "Wrong username/password combination" });
@@ -114,7 +111,6 @@ app.post("/login", (req, res) => {
     );
 });
 app.get('/logout', function(req,res){
-    console.log(this.cookie)
     req.session.destroy(null);
     res.clearCookie('connect.sid');
     res.send({msg: 'Logged Out'})
