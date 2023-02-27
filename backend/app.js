@@ -37,10 +37,10 @@ app.use(
 );
 
 const db = mysql.createConnection({
-    user: "jkica",
-    host: "localhost",
-    password: "password",
-    database: "silverbell",
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
 });
 
 const login = (req, res, email, password) => {
