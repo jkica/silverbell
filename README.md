@@ -12,6 +12,7 @@ The project consists of both backend and frontend in the same repository.
 
 # To run the frontend project:
 - navigate to /frontend folder
+- create the .env file and fill it according to .env.example
 - type "npm install"
 - type "npm run start" (the project will be automatically opened in port 3000)
 
